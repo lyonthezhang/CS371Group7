@@ -1,0 +1,450 @@
+Attribute: P1151
+Value: Q6342720
+
+Attribute: P625
+Value: Latitude: 40.67, Longitude: -73.94
+
+Attribute: P31
+Value: Q208511, Q2264924, Q1093829, Q515, Q1549591, Q51929311, Q1637706
+
+Attribute: P131
+Value: Q1384
+
+Attribute: P150
+Value: Q11299, Q18419, Q18424, Q18426, Q18432
+
+Attribute: P571
+Value: 1624
+
+Attribute: P1313
+Value: Q785304
+
+Attribute: P6
+Value: Q4911497, Q607, Q212648, Q467133, Q467122, Q329910, Q666931, Q439156, Q939458, Q939458, Q441554, Q312502, Q1701296, Q6287566, Q204135, Q6233903, Q3182321, Q4121154, Q2544704, Q5536568, Q2274772, Q2156376
+
+Attribute: P138
+Value: Q126188, Q42462, Q727
+
+Attribute: P1082
+Value: 8398748.0, 8405837.0, 8175133.0, 2507414.0, 1911698.0, 1174779.0, 696115.0, 1478103.0, 391114.0, 242278.0, 152056.0, 119734.0, 79216.0, 49401.0, 21863.0, 13046.0, 11717.0, 10664.0, 7248.0, 5840.0, 4937.0, 8516502.0, 3437202.0, 4766883.0, 5620048.0, 6930446.0, 9454995.0, 7891957.0, 7781984.0, 7894862.0, 7071639.0, 7322564.0, 8008288.0, 8537673.0
+
+Attribute: P194
+Value: Q645195
+
+Attribute: P41
+Value: INVALID
+
+Attribute: P163
+Value: Q1414813
+
+Attribute: P158
+Value: INVALID
+
+Attribute: P190
+Value: Q1781, Q1218, Q34647, Q85, Q84, Q2807, Q956, Q34820, Q1490, Q2844, Q894327, Q585, Q3561, Q3630, Q33935, Q51103, Q8686, Q101625, Q8684, Q1491, Q188673, Q612
+
+Attribute: P898
+Value: nuːˈjɔɹk
+
+Attribute: P460
+Value: Q14435
+
+Attribute: P17
+Value: Q30
+
+Attribute: P910
+Value: Q7038507
+
+Attribute: P1464
+Value: Q8066197
+
+Attribute: P998
+Value: Regional/North_America/United_States/New_York/Localities/N/New_York_City/
+
+Attribute: P402
+Value: 175905
+
+Attribute: P935
+Value: New York City
+
+Attribute: P373
+Value: New York City
+
+Attribute: P948
+Value: INVALID
+
+Attribute: P268
+Value: 11880105b
+
+Attribute: P646
+Value: /m/02_286
+
+Attribute: P227
+Value: 4042011-5
+
+Attribute: P213
+Value: 0000 0001 2196 6726
+
+Attribute: P244
+Value: n79007751
+
+Attribute: P982
+Value: 74e50e58-5deb-4b99-93a2-decbb365c07f
+
+Attribute: P214
+Value: 266415900, 143599538
+
+Attribute: P349
+Value: 00628906
+
+Attribute: P1465
+Value: Q8365583
+
+Attribute: P1566
+Value: 5128581
+
+Attribute: P856
+Value: https://nyc.gov
+
+Attribute: P1740
+Value: Q6612898
+
+Attribute: P1792
+Value: Q9226101
+
+Attribute: P421
+Value: Q941023, Q5390, Q5762
+
+Attribute: P1549
+Value: INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID
+
+Attribute: P281
+Value: 10000–10499, 11004–11005, 11100–11499, 11600–11699
+
+Attribute: P1343
+Value: Q602358, Q867541, Q4114391, Q4173137, Q19180675, Q19077875, Q2041543, Q19190511
+
+Attribute: P2046
+Value: 1214.0
+
+Attribute: P774
+Value: 3651000
+
+Attribute: P2163
+Value: 1204333
+
+Attribute: P2184
+Value: Q1067131
+
+Attribute: P2390
+Value: New York, New York, New_York,_New_York
+
+Attribute: P47
+Value: Q54066, Q502459, Q490505, Q54064, Q112915
+
+Attribute: P1997
+Value: 108424279189115
+
+Attribute: P2633
+Value: Q645208
+
+Attribute: P2468
+Value: 1pz
+
+Attribute: P590
+Value: 975772, 2395220
+
+Attribute: P1281
+Value: 2459115
+
+Attribute: P206
+Value: Q3140, Q212862, Q928157, Q597451, Q867460, Q97, Q1064776, Q1294277
+
+Attribute: P473
+Value: 212, 347, 646, 718, 917, 929
+
+Attribute: P242
+Value: INVALID
+
+Attribute: P2044
+Value: 11.0
+
+Attribute: P3134
+Value: 60763
+
+Attribute: P1448
+Value: INVALID
+
+Attribute: P1705
+Value: INVALID
+
+Attribute: P1278
+Value: 549300ABYZD2SFD5JB29
+
+Attribute: P3417
+Value: New-York-City
+
+Attribute: P486
+Value: D009519
+
+Attribute: P3222
+Value: new-amsterdam
+
+Attribute: P2347
+Value: 105663
+
+Attribute: P3911
+Value: 30104-5
+
+Attribute: P4150
+Value: Data:Ncei.noaa.gov/weather/New York City.tab
+
+Attribute: P3984
+Value: nyc, newyorkcity, New_York_City
+
+Attribute: P1225
+Value: 10045276
+
+Attribute: P1791
+Value: Q8328704
+
+Attribute: P1376
+Value: Q30
+
+Attribute: P1296
+Value: 0046509
+
+Attribute: P793
+Value: Q43550151
+
+Attribute: P2581
+Value: 00041611n
+
+Attribute: P155
+Value: Q223308
+
+Attribute: P3347
+Value: 5000075569
+
+Attribute: P3219
+Value: new-york
+
+Attribute: P5019
+Value: new-york-20
+
+Attribute: P5008
+Value: Q5460604
+
+Attribute: P2924
+Value: 2280838
+
+Attribute: P5357
+Value: new_york
+
+Attribute: P1449
+Value: INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID
+
+Attribute: P706
+Value: Q683705
+
+Attribute: P5573
+Value: 1953
+
+Attribute: P269
+Value: 026581019
+
+Attribute: P1937
+Value: USNYC
+
+Attribute: P94
+Value: INVALID
+
+Attribute: P395
+Value: NY
+
+Attribute: P3096
+Value: Q56876538
+
+Attribute: P1667
+Value: 7007567
+
+Attribute: P691
+Value: ge130170
+
+Attribute: P1830
+Value: Q6956042, Q7013825, Q7061988, Q7330798, Q7354947, Q7566432, Q7603993, Q9286411, Q14706223, Q19952439, Q20979444, Q27988146, Q27988196, Q29378914, Q39060163, Q109711, Q125635, Q126698, Q200959, Q319654, Q603656, Q616682, Q675214, Q717956, Q722123, Q928996, Q1056326, Q1529995, Q1544645, Q1852374, Q1970698, Q1984330, Q1984733, Q1985059, Q2104718, Q2241542, Q2267608, Q2275055, Q2332157, Q2344719, Q2355775, Q2371583, Q2372361, Q2372377, Q2372392, Q2373436, Q2488186, Q2523955, Q2614126, Q2620591, Q2628830, Q2790405, Q2877193, Q2878646, Q2926164, Q2982124, Q3097594, Q3296781, Q4262194, Q4596012, Q4742962, Q4836006, Q4951175, Q5254738, Q5447476, Q5462917, Q5477291, Q5508467, Q5972266, Q5973627, Q5973629, Q6541981, Q6715011, Q8685
+
+Attribute: P1417
+Value: place/New-York-City
+
+Attribute: P5905
+Value: 4020-41183
+
+Attribute: P5247
+Value: 3035-109
+
+Attribute: P6104
+Value: Q15884984
+
+Attribute: P4291
+Value: INVALID
+
+Attribute: P6573
+Value: New_York
+
+Attribute: P1968
+Value: 4acf58baf964a52028d320e3
+
+Attribute: P6703
+Value: 15ky6k6p6fzm3ho7
+
+Attribute: P6713
+Value: PL549161
+
+Attribute: P6766
+Value: 85977539
+
+Attribute: P3500
+Value: 101016
+
+Attribute: P6821
+Value: alvin-place:600
+
+Attribute: P6200
+Value: c9eddyqn66yt
+
+Attribute: P2716
+Value: INVALID
+
+Attribute: P1245
+Value: 754564
+
+Attribute: P1333
+Value: Latitude: 40.496045, Longitude: -74.247195
+
+Attribute: P1335
+Value: Latitude: 40.507675, Longitude: -74.255731
+
+Attribute: P1332
+Value: Latitude: 40.915486, Longitude: -73.910352
+
+Attribute: P1334
+Value: Latitude: 40.73913888888889, Longitude: -73.70061111111112
+
+Attribute: P6262
+Value: memory-beta:New_York_City
+
+Attribute: P3529
+Value: 67844.0, 64894.0, 62909.0, 60850.0, 58878.0, 57369.0, 56448.0, 55246.0, 54148.0
+
+Attribute: P18
+Value: INVALID
+
+Attribute: P7867
+Value: Q84079477
+
+Attribute: P6058
+Value: ville/wd/135137
+
+Attribute: P6404
+Value: new-york
+
+Attribute: P7818
+Value: New_York
+
+Attribute: P7829
+Value: New_York_City
+
+Attribute: P7827
+Value: Nueva_York
+
+Attribute: P7832
+Value: New_York
+
+Attribute: P6987
+Value: 112403
+
+Attribute: P7859
+Value: lccn-no2009189606, lccn-n79007751
+
+Attribute: P6900
+Value: ニューヨーク
+
+Attribute: P1813
+Value: INVALID, INVALID
+
+Attribute: P8402
+Value: Q96991743
+
+Attribute: P8408
+Value: NewYorkCity
+
+Attribute: P672
+Value: Z01.107.567.875.350.530.530, Z01.107.567.875.500.530.530, Z01.433.741
+
+Attribute: P1540
+Value: 3833351.0
+
+Attribute: P1539
+Value: 4245512.0
+
+Attribute: P8406
+Value: T062175
+
+Attribute: P5843
+Value: New York City
+
+Attribute: P8519
+Value: 392
+
+Attribute: P8590
+Value: 11501
+
+Attribute: P5063
+Value: i84552
+
+Attribute: P1438
+Value: 13019
+
+Attribute: P8744
+Value: Q1059873
+
+Attribute: P5125
+Value: Q65090640
+
+Attribute: P3749
+Value: 14414772292044717666
+
+Attribute: P6839
+Value: UsefulNotes/NewYorkCity
+
+Attribute: P4527
+Value: 11902
+
+Attribute: P8592
+Value: INVALID
+
+Attribute: P8974
+Value: p/00c850d9-eb01-4afc-ac84-01543d7f1995
+
+Attribute: P8989
+Value: Q104601281
+
+Attribute: P9037
+Value: 8a761a02-f516-4114-8782-30b80f4b575b
+
+Attribute: P8672
+Value: 1243191799197233153
+
+Attribute: P9100
+Value: nyc, new-york-city
+
+Attribute: P8814
+Value: 09141944-n
+
+Attribute: P8885
+Value: 뉴욕시
+
+Attribute: P9241
+Value: Q3044322
+
