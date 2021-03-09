@@ -1,9 +1,11 @@
 ### Imports up here
 from SPARQLWrapper import SPARQLWrapper, JSON
 from wikidata.client import Client
-from helpers import extract_id_from_url, get_identifier, get_state, get_time_zone, valid_id
+from helpers import *
 from constants import *
 import datetime
+import pandas as pd
+from sklearn.preprocessing import OneHotEncoder
 
 
 # From https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples#Cats
@@ -29,6 +31,7 @@ def get_attributes(data):
     url = data['item']['value']
     target_id = extract_id_from_url(url)
 
+    # Sometimes doing lists() fail so just put it in a try except block
     try:
         entity = wiki_data_client.get(target_id, load=True)
         attributes = entity.lists()
@@ -44,7 +47,7 @@ def get_attributes(data):
 ###### info is a list, where each entry is a tuple of size 2 containing a 1) value containing the P and 2) another list containing relevant entities  
 
 
-
+# Constructs a matrix (list of lists) given a list of data_points
 def construct_matrix(cities_data):
     columns = ["city"]
     columns_set = set(columns)
@@ -63,14 +66,14 @@ def construct_matrix(cities_data):
         
             if a_id == INSTANCE_OF:
                 for value in values:
-                    col_name = a_id + "." + get_identifier(value)
+                    col_name = a_id + "_" + get_identifier(value)
 
                     if col_name not in columns_set:
                         column_location[col_name] = len(columns)
                         columns.append(col_name)
                         columns_set.add(col_name)
 
-            if a_id == INCEPTION_DATE or a_id == CAPITAL_OF or a_id == POPULATION or a_id == LOCATED_IN_TIME_ZONE or a_id == AREA or a_id == LOCATED_IN_TERRITORY:
+            else:
                 col_name = a_id
                 if col_name not in columns_set:
                     column_location[col_name] = len(columns)
@@ -97,19 +100,23 @@ def construct_matrix(cities_data):
             
             if a_id == INSTANCE_OF:
                 for value in values:
-                    col_name = a_id + "." + get_identifier(value)
+                    col_name = a_id + "_" + get_identifier(value)
                     index = column_location[col_name]
                     col_val = 1
 
                     city_info[index] = col_val
 
-            elif a_id == INCEPTION_DATE or a_id == CAPITAL_OF or a_id == AREA:
+            elif a_id == INCEPTION_DATE:
                 index = column_location[a_id]
-                col_val = get_identifier(values[0])
+                col_val = get_inception(get_identifier(values[0]))
+            
+            elif a_id == AREA:
+                index = column_location[a_id]
+                col_val = get_area(get_identifier(values[0]))
             
             elif a_id == POPULATION:
                 index = column_location[a_id]
-                col_val = max([get_identifier(population) for population in values])
+                col_val = get_population(max([get_identifier(population) for population in values]))
 
             elif a_id == LOCATED_IN_TIME_ZONE:
                 index = column_location[a_id]
@@ -125,53 +132,100 @@ def construct_matrix(cities_data):
     
     return table
 
+# Returns a one hot encoded pandas df given a matrix(list of lists)
+def one_hot_encode(matrix):
+    
+    # Make pandas df
+    df = pd.DataFrame(matrix[1:], columns = matrix[0])
+    encoder = OneHotEncoder()
+    
+    # Some cities don't have timezone (wikidata is whack)
+    for i in range(df.shape[0]):
+        time_zone_value = df.loc[i, LOCATED_IN_TIME_ZONE]
+        if time_zone_value == 0:
+            df.loc[i, LOCATED_IN_TIME_ZONE] = "NA"
 
-def main():
-    import time
-    t0 = time.time()
+    # Get one hot encoded df for catergorical variables
+    oe_results = encoder.fit_transform(df[CATEGORICAL_IDS])
+    new_column_names = encoder.get_feature_names(CATEGORICAL_IDS)
 
-    results = run_sparql_query(INITIAL_QUERY)
-    data = results['results']['bindings'][0:10]
-    t1 = time.time()
+    # Add one hot encoded data to original df
+    one_hot_encoded_df = df.join(pd.DataFrame(oe_results.toarray(), columns=new_column_names))
 
-    print(f"Make query: {t1-t0}")
+    # Drop the orginial catergorical columns (repalced with one hot encoded columns) and the NA timezone one
+    one_hot_encoded_df = one_hot_encoded_df.drop(columns = CATEGORICAL_IDS+[LOCATED_IN_TIME_ZONE+"_NA"])
 
+    return one_hot_encoded_df
+
+# Give a one hot encoded pandas df, return a column name to split on
+def select_attribute(df):
+    best_diff = float("inf")
+    best_col = ""
+    target = df.shape[0]/2
+
+    for col_name in df.columns[1:]:
+        total = df[col_name].sum()
+        diff = abs(total - target)
+        if diff < best_diff:
+            best_col = col_name
+            best_diff = diff
+    
+    return best_col
+        
+
+# The following has the general workflow
+# It takes a query, it finds an attribute to split on, and it returns it
+def find_attribute_to_split_on(query):
+    # First run a sparql with 20 cities
+    # ******* MAKE SURE TO INCLUDE LIMIT 20 in the query ******
+    results = run_sparql_query(query)
+
+    # Get the data for them (pick off the first 20 just in case)
+    data = results['results']['bindings'][:20]
+
+    # Get all of the cities data for every city in data
     cities_data = []
     for city in data:
         city_id, attribute_data = get_attributes(city)
         if city_id and attribute_data:
             cities_data.append((city_id, attribute_data))
 
-    t2 = time.time()
-    print(f"Get attributes: {t2-t1}")
+    # Construct a matrix
+    matrix = construct_matrix(cities_data)
 
-    table = construct_matrix(cities_data)
+    print_matrix(matrix) # Uncomment/Comment this if you want it to print the matrix in "matrix.txt"
     
-    t3 = time.time()
-    print(f"Construct Matrix: {t3-t2}")
+    # Get the one hot encoded pandas df of the matrix
+    one_hot = one_hot_encode(matrix)
 
-    return table
+    print_df(one_hot) # Uncomment/Comment this if you want it to print the matrix in "matrix_one_hot.txt"
 
-matrix = main()
-f = open("matrix.txt","w")
-for line in matrix:
-    for item in line:
-        f.write(str(item) + " "*(14-len(str(item))) + "|" )
-    f.write("\n")
-f.close()
+    # Select the attribute to split on
+    selection  = select_attribute(one_hot)
 
-### Bot Loop
-### COMMENTED OUT FOR NOW
+    # Return the selection
+    return selection
 
-# print("Welcome to our 20 Questions Bot")
+# This is the game. Run this to run the game
+def game():
+    
+    print("Welcome to our 20 Questions Bot")
+    
+    query = INITIAL_QUERY
 
-# query = None
-# answer = None
-# final_answer = None
+    for question_number in range(20):
+        # Find a selection based on the query
+        selection = find_attribute_to_split_on(query)
+        # Ask user a question based on the selection
+        question = format_question(selection)
+        
+        print(question)
+        answer = input("(y/n): ")
 
-# for i in range(20):
-# 	query = "TEMPORARY CHANGE ME"
-# 	print("Question " + str(i + 1) + ": " + query)
-# 	answer = input("(y/n): ")
+        # Append to the query based on the selection and the answer
+        query = construct_new_query(query, selection, answer)
 
-# print("Is your answer blah blah blah")
+    # query is now a long query that has narrowed down the cities to some degree. Get some sort of final answer from that query
+    final_answer = get_final_answer(query)
+
+    print(f"Is your answer {final_answer}")
