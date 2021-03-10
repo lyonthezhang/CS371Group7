@@ -5,6 +5,7 @@ from wikidata.globecoordinate import GlobeCoordinate
 from wikidata.quantity import Quantity
 from wikidata.commonsmedia import File
 from wikidata.multilingual import MonolingualText
+from wikidata.client import Client
 
 
 # Get the id of an entity from the url
@@ -17,14 +18,15 @@ def valid_id(entity_id):
     return entity_id in VALID_IDS
 
 
-# Get the time zone given an entity id. This is because wikidata does not have a standard for storing the time_zone for places
-def get_time_zone(entity_id):
-
-    for zone in TIME_ZONES:
-        if entity_id in zone:
-            return zone[0]
+# Given a list of ids. Get the time zone given an entity id. This is because wikidata does not have a standard for storing the time_zone for places
+def get_time_zone(entity_id_lst):
     
-    return entity_id
+    for ent_id in entity_id_lst:
+        for zone in TIME_ZONES:
+            if ent_id in zone:
+                return zone[0]
+    
+    return entity_id_lst[0]
 
 
 # Helper for get_state. Param is a list of entities. It goes through and check if each entity is an istance of a us_state or a us_territory.
@@ -101,7 +103,7 @@ def get_population(num):
     if num < 1000:
         return LESS_THAN_1000
     elif num < 50000:
-        return BETWEEN_1000_AND_500000
+        return BETWEEN_1000_AND_50000
     elif num < 100000:
         return BETWEEN_50000_AND_100000
     elif num < 500000:
@@ -137,7 +139,7 @@ def get_area(num):
     elif num < 1500:
         return BETWEEN_1000_AND_1500
     else:
-        return OVER_15000
+        return OVER_1500
 
 def print_matrix(matrix):
     f = open("matrix.txt","w")
@@ -157,9 +159,88 @@ def print_df(df):
 # See column names in "matrix_one_hot.txt" to see what the selections are going to look like
 # Note: the column names in "matrix_one_hot.txt" are not an all inclusive list on the possible selections
 def format_question(selection):
+    attribute = selection.split("_")[0]
+    value = "_".join(selection.split("_")[1:])
 
-    raise NotImplementedError
+    # ask if a city has a specific population
+    if attribute == POPULATION:
+        if value == LESS_THAN_1000:
+            return "Does the city have less than 1000 residents?"
+        elif value == BETWEEN_1000_AND_50000:
+            return "Does the city have between 1000 and 50,000 residents?"
+        elif value == BETWEEN_50000_AND_100000:
+            return "Does the city have between 50,000 and 100,000 residents?"
+        elif value == BETWEEN_100000_AND_500000:
+            return "Does the city have between 100,000 and 500,000 residents?"
+        elif value == BETWEEN_500000_AND_1MIL:
+            return "Does the city have between 500,000 and 1,000,000 residents?"
+        elif value == MORE_THAN_1_MIL:
+            return "Does the city have more than 1 million residents?"
+    
+    # ask if a city has a specific area
+    elif attribute == AREA:
+        if value == UNDER_100:
+            return "Does the city have an area of less than 100 square kilometers?"
+        elif value == BETWEEN_100_AND_500:
+            return "Does the city have an area of between 100 and 500 square kilometers?"
+        elif value == BETWEEN_500_AND_1000:
+            return "Does the city have an area of between 500 and 1000 square kilometers?"
+        elif value == BETWEEN_1000_AND_1500:
+            return "Does the city have an area of between 1000 and 1500 square kilometers?"
+        elif value == OVER_1500:
+            return "Does the city have an area of over 1500 square kilometers?"
+    
+    # ask if a city was founded during a specific time span
+    elif attribute == INCEPTION_DATE:
+        if value == BEFORE_1600S:
+            return "Was the city founded before the 1600s?"
+        if value == DURING_1600S:
+            return "Was the city founded during the 1600s?"
+        if value == DURING_1700S:
+            return "Was the city founded during the 1700s?"
+        if value == DURING_1800S:
+            return "Was the city founded during the 1800s?"
+        if value == DURING_1900S:
+            return "Was the city founded during the 1900s?"
+        if value == DURING_2000S:
+            return "Was the city founded during the 2000s?"
+    
+    # ask if a city is located in a specific time zone
+    elif attribute == LOCATED_IN_TIME_ZONE:
+        if value == TIME_ZONES[0][0]:
+            return "Does the city reside in Eastern time zone?"
+        elif value == TIME_ZONES[1][0]:
+            return "Does the city reside in Central time zone?"
+        elif value == TIME_ZONES[2][0]:
+            return "Does the city reside in Mountain time zone?"
+        elif value == TIME_ZONES[3][0]:
+            return "Does the city reside in Western time zone?"
+        elif value == TIME_ZONES[4][0]:
+            return "Does the city reside in Alaskan time zone?"
+        elif value == TIME_ZONES[5][0]:
+            return "Does the city reside in Hawaiian time zone?"
+        else:
+            return f"Does the city's time zone correspond with the {get_name(value)} time zone?"
+            
+    # ask question about whether city is located in specific territory
+    elif attribute == LOCATED_IN_TERRITORY:
+        return f"Is the city located in {get_name(value)}?"
+    
+    # ask question about whether city is an instance of a specific thing
+    elif attribute == INSTANCE_OF: 
+        return f"Is this city a {get_name(value)}?"
 
+
+
+# Initialize wikidata client once
+wiki_data_client  = Client()
+
+# return the name corresponding to the entity ID
+def get_name(entity_id):
+    entity = wiki_data_client.get(entity_id, load=True)
+    if type(entity) == Entity:
+        return entity.label
+    return "entity id does not correspond to an entity"
 
 # Take an old_query, selection, and an answer from the user and return a new_query(string) with the answer to the selection appended
 # on to the old_query that can be run on SPARQL

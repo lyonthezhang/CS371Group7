@@ -120,7 +120,7 @@ def construct_matrix(cities_data):
 
             elif a_id == LOCATED_IN_TIME_ZONE:
                 index = column_location[a_id]
-                col_val = get_time_zone(get_identifier(values[0]))
+                col_val = get_time_zone([get_identifier(val) for val in values])
             
             elif a_id == LOCATED_IN_TERRITORY:
                 index = column_location[a_id]
