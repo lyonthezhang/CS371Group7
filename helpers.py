@@ -17,6 +17,11 @@ def extract_id_from_url(url_string):
 def valid_id(entity_id):
     return entity_id in VALID_IDS
 
+def get_other_time_zone(time_zone):
+    for zone in TIME_ZONES:
+        if time_zone in zone:
+            return zone[1]
+    return time_zone
 
 # Given a list of ids. Get the time zone given an entity id. This is because wikidata does not have a standard for storing the time_zone for places
 def get_time_zone(entity_id_lst):
@@ -38,7 +43,11 @@ def get_state_helper(potential_states):
         # doing .lists() sometimes fails for some reason (it is because of an error in the wikidata library)
         # not sure how to fix this but wanted to point it out
         # **************************************************************************************************
-        attribute_data = p_state.lists()
+        
+        try:
+            attribute_data = p_state.lists()
+        except:
+            return "NA"
 
         for attribute, values in attribute_data:
             if get_identifier(attribute) == INSTANCE_OF:
@@ -54,7 +63,7 @@ def get_state(potential_states):
 
     state_id = get_state_helper(potential_states)
 
-    if state_id:
+    if state_id and state_id != "NA":
         return state_id
 
     # All p_states in potential_states are counties
@@ -65,7 +74,10 @@ def get_state(potential_states):
     # doing .lists() sometimes fails for some reason (it is because of an error in the wikidata library)
     # not sure how to fix this but wanted to point it out
     # **************************************************************************************************
-    attribute_data = county.lists()
+    try:
+        attribute_data = county.lists()
+    except:
+        return "NA"
 
     # Get the located in administrative body stuff
     potential_states2 = []
@@ -162,6 +174,11 @@ def print_df(df):
     df.to_string(f)
     f.close()
 
+def print_df_for_demo(df):
+    f = open("class_demo.txt", "w")
+    df.to_string(f)
+    f.close()
+
 
 # Take a selection and outputs a question (string) that the user can understand
 # See column names in "matrix_one_hot.txt" to see what the selections are going to look like
@@ -249,7 +266,7 @@ def get_name(entity_id):
     entity = wiki_data_client.get(entity_id, load=True)
     if type(entity) == Entity:
         return entity.label
-    return "entity id does not correspond to an entity"
+    return ENTITY_ID_ERROR
 
 # Take an old_query, selection, and an answer from the user and return a new_query(string) with the answer to the selection appended
 # on to the old_query that can be run on SPARQL
@@ -359,6 +376,14 @@ def construct_new_query(old_query, selection, answer):
             newQuery = str("{?item  wdt:P131 ?county} MINUS {?county wdt:P131 wd:" +
                            value + " } FILTER NOT EXISTS{(?item wdt:P131 wd:" + value + ")}")
 
+    elif attribute == LOCATED_IN_TIME_ZONE:
+        other_time_zone = get_other_time_zone(value)
+
+        newQuery = str("{?item  wdt:P421" + " wd:" + value + ".} UNION {?item  wdt:P421" + " wd:" + other_time_zone + " .}")
+        
+        if answer == "n":
+            newQuery = str("FILTER NOT EXISTS{(?item  wdt:P421" + " wd:" + value + ")} FILTER NOT EXISTS{(?item  wdt:P421" + " wd:" + other_time_zone + ")}")
+    
     else:
         newQuery = str("?item wdt:" + attribute + " wd:" + value)
 
@@ -381,5 +406,16 @@ def construct_new_query(old_query, selection, answer):
 
 
 def get_final_answer(results):
+    data = results['results']['bindings'][:10]
+    potential_answers = []
+    
+    for dat in data:
+        url = dat['item']['value']
+        target_id = extract_id_from_url(url)
+        
+        city_name = get_name(target_id)
 
-    return str(results[1:10])
+        if city_name != ENTITY_ID_ERROR:
+            potential_answers.append(city_name)
+
+    return str(", ".join([str(ans) for ans in potential_answers]))

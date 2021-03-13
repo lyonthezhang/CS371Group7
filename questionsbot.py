@@ -143,12 +143,30 @@ def one_hot_encode(matrix):
     # Make pandas df
     df = pd.DataFrame(matrix[1:], columns=matrix[0])
     encoder = OneHotEncoder()
+    print_df_for_demo(df)
 
-    # Some cities don't have timezone (wikidata is whack)
+    # Some cities don't have timezone or inception date (wikidata is whack)
     for i in range(df.shape[0]):
         time_zone_value = df.loc[i, LOCATED_IN_TIME_ZONE]
+        inception_date_value = df.loc[i, INCEPTION_DATE]
+        area_value = df.loc[i, AREA]
+        state_value = df.loc[i, LOCATED_IN_TERRITORY]
+        populuation_value = df.loc[i, POPULATION]
+
         if time_zone_value == 0:
             df.loc[i, LOCATED_IN_TIME_ZONE] = "NA"
+        
+        if inception_date_value == 0:
+            df.loc[i, INCEPTION_DATE] = "NA"
+        
+        if area_value == 0:
+            df.loc[i, AREA] = "NA"
+        
+        if state_value == 0:
+            df.loc[i, LOCATED_IN_TERRITORY] = "NA"
+        
+        if populuation_value == 0:
+            df.loc[i, POPULATION] = "NA"
 
     # Get one hot encoded df for catergorical variables
     oe_results = encoder.fit_transform(df[CATEGORICAL_IDS])
@@ -158,13 +176,19 @@ def one_hot_encode(matrix):
     one_hot_encoded_df = df.join(pd.DataFrame(
         oe_results.toarray(), columns=new_column_names))
 
-    # Drop the orginial catergorical columns (repalced with one hot encoded columns) and the NA timezone one
+    # Drop the orginial catergorical columns (repalced with one hot encoded columns) and the NA ones
+    one_hot_encoded_df = one_hot_encoded_df.drop(columns=CATEGORICAL_IDS)
     if "P421_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(
-            columns=CATEGORICAL_IDS+[LOCATED_IN_TIME_ZONE+"_NA"])
-    else:
-        one_hot_encoded_df = one_hot_encoded_df.drop(
-            columns=CATEGORICAL_IDS)
+        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P421_NA"])
+    if "P131_NA" in one_hot_encoded_df.columns:
+        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P131_NA"])
+    if "P571_NA" in one_hot_encoded_df.columns:
+        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P571_NA"])
+    if "P2046_NA" in one_hot_encoded_df.columns:
+        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P2046_NA"])
+    if "P1082_NA" in one_hot_encoded_df.columns:
+        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P1082_NA"])
+    
 
     return one_hot_encoded_df
 
@@ -194,7 +218,7 @@ def find_attribute_to_split_on(query):
     results = run_sparql_query(query)
 
     # Get the data for them (pick off the first 20 just in case)
-    data = results['results']['bindings'][:20]
+    data = results['results']['bindings'][:SAMPLE_SIZE]
 
     # Get all of the cities data for every city in data
     cities_data = []
@@ -229,12 +253,20 @@ def game():
     print("Welcome to our 20 Questions Bot")
 
     query = INITIAL_QUERY
-
-    for question_number in range(20):
+    prev_question = ""
+    
+    for question_number in range(NUM_QUESTIONS):
         # Find a selection based on the query
+        #print(query)
         selection = find_attribute_to_split_on(query)
         # Ask user a question based on the selection
         question = format_question(selection)
+        
+        if prev_question == question:
+            print(f"The bot determined that the best question to ask is the same as the last question.\nCurrent question: {prev_question}")
+            print(f"The bot is now going to end the game...")
+            break
+        prev_question = question
 
         print(question)
         answer = input("(y/n): ")
@@ -246,7 +278,13 @@ def game():
     final_results = run_sparql_query(query)
     final_answer = get_final_answer(final_results)
 
-    print(f"Is your answer {final_answer}")
+    print(f"Is your answer of of the following: {final_answer}")
+    answer = input("(y/n): ")
+
+    if answer == "y":
+        print("Awesome! Thank you for playing the game")
+    else:
+        print("We're sorry. Please play again or increase sample size in constants.py for better results.")
 
 
 game()
