@@ -38,6 +38,9 @@ VALID_IDS = set(["P31","P571","P131","P1082","P421","P2046"])
 # Categorical IDS
 CATEGORICAL_IDS = ["P131", "P421", "P571", "P1082", "P2046"]
 
+# Potential columns to drop
+POTENTIAL_DROP_COLS = ["P131", "P421", "P571", "P1082", "P2046", "P421_NA", "P131_NA", "P571_NA", "P2046_NA", "P1082_NA"]
+
 # Potentila ids. Capital of, Postal Code, Located body of water, Contains administrative enties (boroughs)
 POTENTIAL_IDS = ["P1376", "P281", "P206", "P150"]
 
@@ -68,5 +71,6 @@ BETWEEN_1000_AND_1500 = "BETWEEN_1000_AND_1500"
 OVER_1500 = "OVER_1500"
 
 ENTITY_ID_ERROR = "Entity id does not correspond to an entity"
-NUM_QUESTIONS = 20
+NUM_QUESTIONS = 50
 SAMPLE_SIZE = 10
+BIGGER_SAMPLE_SIZE = 20

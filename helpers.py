@@ -55,7 +55,7 @@ def get_state_helper(potential_states):
                     if get_identifier(value) == US_STATE or get_identifier(value) == US_TERRITORY:
                         return get_identifier(p_state)
 
-    return None
+    return "NA"
 
 
 # Gets the state given a list of potential states. Param is a list of entities
@@ -190,9 +190,9 @@ def format_question(selection):
     # ask if a city has a specific population
     if attribute == POPULATION:
         if value == LESS_THAN_1000:
-            return "Does the city have less than 1000 residents?"
+            return "Does the city have less than 1,000 residents?"
         elif value == BETWEEN_1000_AND_50000:
-            return "Does the city have between 1000 and 50,000 residents?"
+            return "Does the city have between 1,000 and 50,000 residents?"
         elif value == BETWEEN_50000_AND_100000:
             return "Does the city have between 50,000 and 100,000 residents?"
         elif value == BETWEEN_100000_AND_500000:
@@ -374,7 +374,7 @@ def construct_new_query(old_query, selection, answer):
                            value + " .} UNION {?item wdt:P131 wd:" + value + " .}")
         else:
             newQuery = str("{?item  wdt:P131 ?county} MINUS {?county wdt:P131 wd:" +
-                           value + " } FILTER NOT EXISTS{(?item wdt:P131 wd:" + value + ")}")
+                           value + " } FILTER NOT EXISTS{?item wdt:P131 wd:" + value + "}")
 
     elif attribute == LOCATED_IN_TIME_ZONE:
         other_time_zone = get_other_time_zone(value)
@@ -382,13 +382,13 @@ def construct_new_query(old_query, selection, answer):
         newQuery = str("{?item  wdt:P421" + " wd:" + value + ".} UNION {?item  wdt:P421" + " wd:" + other_time_zone + " .}")
         
         if answer == "n":
-            newQuery = str("FILTER NOT EXISTS{(?item  wdt:P421" + " wd:" + value + ")} FILTER NOT EXISTS{(?item  wdt:P421" + " wd:" + other_time_zone + ")}")
+            newQuery = str("FILTER NOT EXISTS{?item  wdt:P421" + " wd:" + value + "} FILTER NOT EXISTS{?item  wdt:P421" + " wd:" + other_time_zone + "}")
     
     else:
         newQuery = str("?item wdt:" + attribute + " wd:" + value)
 
         if answer == "n":
-            newQuery = str("FILTER NOT EXISTS{(" + newQuery + ")}")
+            newQuery = str("FILTER NOT EXISTS{" + newQuery + "}")
         else:
             newQuery = str(newQuery + ".")
 
@@ -406,7 +406,7 @@ def construct_new_query(old_query, selection, answer):
 
 
 def get_final_answer(results):
-    data = results['results']['bindings'][:10]
+    data = results['results']['bindings'][:20]
     potential_answers = []
     
     for dat in data:

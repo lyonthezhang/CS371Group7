@@ -146,49 +146,50 @@ def one_hot_encode(matrix):
     print_df_for_demo(df)
 
     # Some cities don't have timezone or inception date (wikidata is whack)
-    for i in range(df.shape[0]):
-        time_zone_value = df.loc[i, LOCATED_IN_TIME_ZONE]
-        inception_date_value = df.loc[i, INCEPTION_DATE]
-        area_value = df.loc[i, AREA]
-        state_value = df.loc[i, LOCATED_IN_TERRITORY]
-        populuation_value = df.loc[i, POPULATION]
+    has_time_zone = False
+    has_inception_date = False
+    has_area = False
+    has_state = False
+    has_population = False
 
-        if time_zone_value == 0:
+    categorical_cols = []
+    
+    for col_name in df.columns:
+        if col_name in CATEGORICAL_IDS:
+            categorical_cols.append(col_name)
+
+    for i in range(df.shape[0]):
+
+        if LOCATED_IN_TIME_ZONE in categorical_cols and df.loc[i, LOCATED_IN_TIME_ZONE] == 0:
             df.loc[i, LOCATED_IN_TIME_ZONE] = "NA"
         
-        if inception_date_value == 0:
+        if INCEPTION_DATE in categorical_cols and df.loc[i, INCEPTION_DATE] == 0:
             df.loc[i, INCEPTION_DATE] = "NA"
         
-        if area_value == 0:
+        if AREA in categorical_cols and df.loc[i, AREA] == 0:
             df.loc[i, AREA] = "NA"
         
-        if state_value == 0:
+        if LOCATED_IN_TERRITORY in categorical_cols and df.loc[i, LOCATED_IN_TERRITORY] == 0:
             df.loc[i, LOCATED_IN_TERRITORY] = "NA"
         
-        if populuation_value == 0:
+        if POPULATION in categorical_cols and df.loc[i, POPULATION] == 0:
             df.loc[i, POPULATION] = "NA"
 
     # Get one hot encoded df for catergorical variables
-    oe_results = encoder.fit_transform(df[CATEGORICAL_IDS])
-    new_column_names = encoder.get_feature_names(CATEGORICAL_IDS)
+    oe_results = encoder.fit_transform(df[categorical_cols])
+    new_column_names = encoder.get_feature_names(categorical_cols)
 
     # Add one hot encoded data to original df
     one_hot_encoded_df = df.join(pd.DataFrame(
         oe_results.toarray(), columns=new_column_names))
 
     # Drop the orginial catergorical columns (repalced with one hot encoded columns) and the NA ones
-    one_hot_encoded_df = one_hot_encoded_df.drop(columns=CATEGORICAL_IDS)
-    if "P421_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P421_NA"])
-    if "P131_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P131_NA"])
-    if "P571_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P571_NA"])
-    if "P2046_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P2046_NA"])
-    if "P1082_NA" in one_hot_encoded_df.columns:
-        one_hot_encoded_df = one_hot_encoded_df.drop(columns=["P1082_NA"])
-    
+    drop_cols = []
+    for col_name in POTENTIAL_DROP_COLS:
+        if col_name in one_hot_encoded_df.columns:
+            drop_cols.append(col_name)
+
+    one_hot_encoded_df = one_hot_encoded_df.drop(columns=drop_cols)
 
     return one_hot_encoded_df
 
@@ -212,13 +213,13 @@ def select_attribute(df):
 
 # The following has the general workflow
 # It takes a query, it finds an attribute to split on, and it returns it
-def find_attribute_to_split_on(query):
+def find_attribute_to_split_on(query, size):
     # First run a sparql with 20 cities
     # ******* MAKE SURE TO INCLUDE LIMIT 20 in the query ******
     results = run_sparql_query(query)
 
     # Get the data for them (pick off the first 20 just in case)
-    data = results['results']['bindings'][:SAMPLE_SIZE]
+    data = results['results']['bindings'][:size]
 
     # Get all of the cities data for every city in data
     cities_data = []
@@ -253,20 +254,27 @@ def game():
     print("Welcome to our 20 Questions Bot")
 
     query = INITIAL_QUERY
-    prev_question = ""
+    prev_questions = set()
     
     for question_number in range(NUM_QUESTIONS):
         # Find a selection based on the query
         #print(query)
-        selection = find_attribute_to_split_on(query)
+        selection = find_attribute_to_split_on(query, SAMPLE_SIZE)
         # Ask user a question based on the selection
         question = format_question(selection)
         
-        if prev_question == question:
-            print(f"The bot determined that the best question to ask is the same as the last question.\nCurrent question: {prev_question}")
-            print(f"The bot is now going to end the game...")
-            break
-        prev_question = question
+        if question in prev_questions:
+            print(f"The bot determined that the best question to ask is the same as a previous question.")
+            print(f"Making a new query with a bigger sample size ...")
+
+            selection = find_attribute_to_split_on(query, BIGGER_SAMPLE_SIZE)
+            question = format_question(selection)
+
+            if question in prev_questions:
+                print("Could not find a better question to split on.\nBot is ending the game now ...")
+                break
+            
+        prev_questions.add(question)
 
         print(question)
         answer = input("(y/n): ")

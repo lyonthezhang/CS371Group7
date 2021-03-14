@@ -1,11 +1,3 @@
-     city      P421  P31_Q1093829  P31_Q1549591  P31_Q1637706   P131          P571                      P1082                  P2046  P31_Q62049  P31_Q1266818  P31_Q13218391  P31_Q21518270  P31_Q1074523  P31_Q76514543
-0    Q975  Q2086913             1             1             1  Q1439  DURING_1700S            MORE_THAN_1_MIL  BETWEEN_1000_AND_1500           0             0              0              0             0              0
-1   Q1297  Q2086913             1             1             1  Q1204  DURING_1800S            MORE_THAN_1_MIL   BETWEEN_500_AND_1000           0             0              0              0             0              0
-2   Q5083   Q847142             1             1             0  Q1223  DURING_1800S    BETWEEN_500000_AND_1MIL    BETWEEN_100_AND_500           1             0              0              0             0              0
-3   Q5092   Q941023             1             1             0  Q1391  DURING_1700S    BETWEEN_500000_AND_1MIL    BETWEEN_100_AND_500           0             1              0              0             0              0
-4   Q5917         0             1             1             0    Q99  DURING_1900S  BETWEEN_100000_AND_500000              UNDER_100           0             0              1              0             0              0
-5   Q6346   Q941023             1             1             0  Q1415  DURING_1800S    BETWEEN_500000_AND_1MIL   BETWEEN_500_AND_1000           1             0              0              1             1              0
-6   Q6580         0             1             0             0  Q1428  DURING_1800S     BETWEEN_1000_AND_50000              UNDER_100           1             0              0              0             0              1
-7   Q6586   Q941023             1             0             0  Q1384  DURING_1800S     BETWEEN_1000_AND_50000    BETWEEN_100_AND_500           0             0              0              0             0              0
-8   Q8652   Q941023             1             1             0   Q812  DURING_1800S  BETWEEN_100000_AND_500000              OVER_1500           0             0              0              0             0              0
-9  Q11592   Q847142             1             0             0    Q99  DURING_1800S     BETWEEN_1000_AND_50000              UNDER_100           0             0              0              0             0              0
+Empty DataFrame
+Columns: [city]
+Index: []
