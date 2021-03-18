@@ -6,7 +6,7 @@
 
 Welcome to our 20 Questions Bot (cities edition)! This bot will find the US city that you are thinking of. 
 
-It will run an initial query of Wikidata to scrape a broad list of American cities. Then, it will narrow this list by asking you yes/no questions and adding to the query string based on the answers given to it. 
+It will run an initial query of Wikidata to get a broad list of American cities. Then, it will narrow down the list of possible cities by asking you yes/no questions and adding to the query string based on the answers given to it. 
 
 The bot determines which questions to ask intelligently, so that it is able to solve for the city in as few questions as possible. It keeps track of a matrix of one-hot encoded attributes for each city. For each city, there is a 1 marked for an attribute if it pertains to that city, and a 0 otherwise. Then, the bot calculates which attribute contains the closest to a 50-50 split between cities. With this attribute in hand, the question the bot asks is whether or not the attribute pertains to the city in the player's mind. The bot is then able to eliminate all cities that do not match with the player's answer from contention.
 
