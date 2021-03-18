@@ -30,4 +30,4 @@ The bot will ask questions now. Please answer in the terminal with a lowercase '
 Notes:
 - The bot may sometimes fail with HTTP Error 429: Too Many Requests. This is outside of our control, so please run the bot again.
 - If the bot fails to return the proper result, it may be because of the limiting size of our query. This was done for performance purposes, as larger query sizes were infeasible to demonstrate. To fix this, please open constants.py and change the value SAMPLE_SIZE to the desired value. Warning: The default value is 10 and queries too large may slow the bot to a crawl.
-- To change the number of questions asked by the bot, changed NUM_QUESTIONS in constants.py to the desired number.
+- To change the number of questions asked by the bot, change NUM_QUESTIONS in constants.py to the desired number.
