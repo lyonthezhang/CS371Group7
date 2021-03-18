@@ -1,8 +1,8 @@
-# CS 371 Group 7: 20 Questions Bot
+### CS 371 Group 7: 20 Questions Bot
 
 ---
 
-### Overview and Implementation
+# Overview and Implementation
 
 Welcome to our 20 Questions Bot (cities edition)! This bot will find the US city that you are thinking of. 
 
