@@ -1,8 +1,8 @@
-### CS 371 Group 7: 20 Questions Bot
+# CS 371 Group 7: 20 Questions Bot
 
 ---
 
-# Overview and Implementation
+### Overview and Implementation
 
 Welcome to our 20 Questions Bot (cities edition)! This bot will find the US city that you are thinking of. 
 
@@ -14,7 +14,7 @@ In 20 questions or less, it will tell you what it thinks the city you are thinki
 
 ---
 
-# Usage
+### Usage
 
 First clone the repo:
 `git clone https://github.com/lyonthezhang/CS371Group7.git`
